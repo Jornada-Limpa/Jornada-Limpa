@@ -46,16 +46,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.generation</groupId>
-			<artifactId>blogpessoal</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.generation</groupId>
-			<artifactId>lojadegames</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -66,5 +56,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

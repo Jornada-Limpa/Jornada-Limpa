@@ -95,7 +95,5 @@ public class Produto {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
-	}
-	
-	
+	}	
 }
