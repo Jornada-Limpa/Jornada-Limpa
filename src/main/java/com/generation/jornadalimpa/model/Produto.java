@@ -1,7 +1,6 @@
 package com.generation.jornadalimpa.model;
 
 import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -12,7 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+
 
 @Entity
 @Table(name = "tb_produtos")
@@ -27,6 +28,7 @@ public class Produto {
 	private String produto;
 	
 	@Column(nullable = false, precision = 6, scale = 2) //Decimal(6,2) = 9999,99
+	@Positive
 	private BigDecimal preco;
 	
 	@Size(min = 1, max = 10, message = "O campo tamanho deve ter no minimo 1 e no maximo 10 caracteres")
@@ -42,11 +44,16 @@ public class Produto {
 	private String cor;
 	
 	@NotBlank(message = "O campo foto nao pode estar vazio")
+	@Size(max = 5000)
 	private String foto;
 
 	@ManyToOne
 	@JsonIgnoreProperties("produtos")
 	private Categoria categoria;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("produtos")
+	private Usuario usuario;
 	
 	public Long getId() {
 		return id;
@@ -111,6 +118,12 @@ public class Produto {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	
-	
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }
