@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.jornadalimpa.model.Produto;
+import com.generation.jornadalimpa.repository.CategoriaRepository;
 import com.generation.jornadalimpa.repository.ProdutoRepository;
 
 import jakarta.validation.Valid;
@@ -29,6 +30,9 @@ import jakarta.validation.Valid;
 public class ProdutoController {
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 
 	@GetMapping
 	public ResponseEntity<List<Produto>> getall() {
@@ -43,11 +47,16 @@ public class ProdutoController {
 
 	@PostMapping
 	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
-		if (produto.getId() != null) {
-			Optional<Produto> targetProduct = produtoRepository.findById(produto.getId());
-			if (targetProduct.isPresent())
-				throw new ResponseStatusException(HttpStatus.CONFLICT, "Produto com o mesmo Id já existente!");
-		}
+		
+		if (categoriaRepository.existsById(produto.getCategoria().getId())){
+			if (produto.getId() != null) {
+				Optional<Produto> targetProduct = produtoRepository.findById(produto.getId());
+				if (targetProduct.isPresent())
+					throw new ResponseStatusException(HttpStatus.CONFLICT, "Produto com o mesmo Id já existente!");
+			}
+		}else
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tema não existe", null);
+		
 		return (ResponseEntity.ok(produtoRepository.save(produto)));
 	}
 
@@ -62,24 +71,30 @@ public class ProdutoController {
 	
 	@PutMapping
 	public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto){
-		return produtoRepository.findById(produto.getId())
-				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
-						.body(produtoRepository.save(produto)))
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());	
+		
+		if (categoriaRepository.existsById(produto.getCategoria().getId()))
+		{
+			return (produtoRepository.findById(produto.getId())
+					.map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
+							.body(produtoRepository.save(produto)))
+					.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
+		}
+		else
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tema não existe", null);
 	}
 	
-//	@GetMapping("/produto/{produto}")
-//	public ResponseEntity<List<Produto>> getByProduto(@PathVariable String produto){
-//		return ResponseEntity.ok(produtoRepository.findAllByProdutoContainingIgnoreCase(produto));
-//	}
-//	
-//	@GetMapping("/menor-preco")
-//	public List<Produto> listarProdutosOrdenadosPorPrecomenor() {
-//        return produtoRepository.findAllByOrderByPrecoAsc();
-//    }
-//	
-//	@GetMapping("/maior-preco")
-//	public List<Produto> listarProdutosOrdenadosPorPrecomaior() {
-//        return produtoRepository.findAllByOrderByPrecoDesc();
-//    }
+	@GetMapping("/produto/{produto}")
+	public ResponseEntity<List<Produto>> getByProduto(@PathVariable String produto){
+		return ResponseEntity.ok(produtoRepository.findAllByProdutoContainingIgnoreCase(produto));
+	}
+	
+	@GetMapping("/menor-preco")
+	public List<Produto> listarProdutosOrdenadosPorPrecomenor() {
+        return produtoRepository.findAllByOrderByPrecoAsc();
+    }
+	
+	@GetMapping("/maior-preco")
+	public List<Produto> listarProdutosOrdenadosPorPrecomaior() {
+        return produtoRepository.findAllByOrderByPrecoDesc();
+    }
 }
