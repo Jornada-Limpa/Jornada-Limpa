@@ -34,7 +34,7 @@ public class ProdutoController {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<Produto>> getall() {
 		return ResponseEntity.ok(produtoRepository.findAll());
 	}
@@ -55,7 +55,7 @@ public class ProdutoController {
 					throw new ResponseStatusException(HttpStatus.CONFLICT, "Produto com o mesmo Id já existente!");
 			}
 		}else
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tema não existe", null);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "categoria não existe", null);
 		
 		return (ResponseEntity.ok(produtoRepository.save(produto)));
 	}
