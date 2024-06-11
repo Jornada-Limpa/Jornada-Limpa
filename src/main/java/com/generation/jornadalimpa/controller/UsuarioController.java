@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.generation.jornadalimpa.model.Produto;
 import com.generation.jornadalimpa.model.Usuario;
 import com.generation.jornadalimpa.model.UsuarioLogin;
 import com.generation.jornadalimpa.repository.UsuarioRepository;
