@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -31,8 +33,9 @@ public class Usuario
 	@Size(min = 8, max = 500, message = "O atributo senha precisa ter no mínimo 8 e no máximo 500 caracteres")
 	private String senha;
 	
+	@Schema(example = "jornadalimpa123@gmail.com")
 	@NotBlank
-	@Size(min = 11, max = 255, message = "O atributo email precisa ter no mínimo 11 e no máximo 255 caracteres")
+	@Email(message = "o atributo email deve ser um email válido")
 	private String email;
 	
 	@Size(max = 5000)
